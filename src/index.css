@@ -1,0 +1,297 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* 
+ * Voyage Travel Theme
+ * A light, airy, modern travel-inspired palette
+ * Soft whites, light neutrals, sky/ocean/teal blues
+ * NO orange tones
+ *
+ * Typography: Plus Jakarta Sans (display) + DM Sans (body)
+ * Loaded via Google Fonts in index.html
+ */
+
+@layer base {
+  html {
+    font-size: 16px; /* Lock base font size to prevent panel-toggle resizing */
+  }
+
+  :root {
+    /* Core backgrounds - Light & Airy */
+    --background: 210 40% 98%;
+    --foreground: 220 25% 15%;
+    
+    /* Card surfaces with subtle warmth */
+    --card: 0 0% 100%;
+    --card-foreground: 220 25% 15%;
+    
+    /* Popover/modal surfaces */
+    --popover: 0 0% 100%;
+    --popover-foreground: 220 25% 15%;
+    
+    /* Primary - Ocean/Sky Blue */
+    --primary: 205 85% 50%;
+    --primary-foreground: 0 0% 100%;
+    
+    /* Secondary - Soft Sand */
+    --secondary: 35 30% 92%;
+    --secondary-foreground: 220 25% 15%;
+    
+    /* Muted - Light gray-blue */
+    --muted: 210 25% 94%;
+    --muted-foreground: 220 15% 45%;
+    
+    /* Accent - Soft teal/aqua (no orange) */
+    --accent: 185 60% 50%;
+    --accent-foreground: 0 0% 100%;
+    
+    /* Destructive */
+    --destructive: 0 70% 50%;
+    --destructive-foreground: 0 0% 100%;
+    
+    /* Borders and inputs */
+    --border: 210 20% 88%;
+    --input: 210 20% 94%;
+    --ring: 205 85% 50%;
+    
+    --radius: 0.75rem;
+    
+    /* Travel theme custom colors - No orange */
+    --ocean-deep: 210 70% 35%;
+    --ocean-mid: 205 65% 50%;
+    --ocean-light: 200 75% 65%;
+    --teal-soft: 185 50% 55%;
+    --teal-light: 180 45% 65%;
+    --sand-light: 210 20% 96%;
+    --sand-warm: 200 15% 92%;
+    --cream: 210 30% 98%;
+    --sky-light: 205 100% 96%;
+    
+    /* Glass effect colors - Light mode */
+    --glass-bg: 0 0% 100% / 0.8;
+    --glass-border: 210 20% 85% / 0.5;
+    --glass-highlight: 0 0% 100% / 0.9;
+    
+    /* Voice/mic states - No orange */
+    --mic-idle: 205 85% 50%;
+    --mic-listening: 185 60% 50%;
+    --mic-processing: 200 80% 55%;
+    
+    /* Gradients */
+    --gradient-ocean: linear-gradient(135deg, hsl(205 85% 50%) 0%, hsl(200 75% 65%) 100%);
+    --gradient-teal: linear-gradient(135deg, hsl(185 60% 50%) 0%, hsl(180 45% 65%) 100%);
+    --gradient-warm: linear-gradient(180deg, hsl(210 40% 98%) 0%, hsl(210 20% 96%) 100%);
+    --gradient-glass: linear-gradient(135deg, rgba(255,255,255,0.9) 0%, rgba(255,255,255,0.7) 100%);
+    --gradient-sky: linear-gradient(180deg, hsl(205 100% 96%) 0%, hsl(210 40% 98%) 100%);
+    
+    /* Shadows - Softer for light theme */
+    --shadow-soft: 0 4px 20px -2px hsl(210 30% 10% / 0.08);
+    --shadow-glow: 0 0 40px -10px hsl(205 85% 50% / 0.25);
+    --shadow-card: 0 8px 32px -8px hsl(210 30% 10% / 0.1);
+    
+    /* Sidebar (if needed) */
+    --sidebar-background: 0 0% 100%;
+    --sidebar-foreground: 220 25% 15%;
+    --sidebar-primary: 205 85% 50%;
+    --sidebar-primary-foreground: 0 0% 100%;
+    --sidebar-accent: 35 30% 92%;
+    --sidebar-accent-foreground: 220 25% 15%;
+    --sidebar-border: 210 20% 88%;
+    --sidebar-ring: 205 85% 50%;
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+  
+  html {
+    scroll-behavior: smooth;
+  }
+  
+  body {
+    @apply bg-background text-foreground antialiased;
+    font-family: 'DM Sans', system-ui, sans-serif;
+  }
+  
+  h1, h2, h3, h4, h5, h6 {
+    font-family: 'Plus Jakarta Sans', 'DM Sans', system-ui, sans-serif;
+  }
+}
+
+@layer components {
+  /* Glassmorphism card - Light version */
+  .glass-card {
+    @apply rounded-2xl border shadow-card;
+    background: linear-gradient(135deg, rgba(255,255,255,0.95) 0%, rgba(255,255,255,0.85) 100%);
+    border-color: hsl(var(--border));
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+  }
+  
+  /* Glass card for dark overlays (landing page) */
+  .glass-card-dark {
+    @apply rounded-2xl border border-white/20 shadow-lg;
+    background: linear-gradient(135deg, rgba(0,0,0,0.4) 0%, rgba(0,0,0,0.2) 100%);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+  }
+  
+  /* Premium button glow */
+  .btn-glow {
+    @apply relative overflow-hidden;
+    box-shadow: 0 0 30px -5px hsl(var(--primary) / 0.4);
+    transition: box-shadow 0.3s ease, transform 0.2s ease;
+  }
+  
+  .btn-glow:hover {
+    box-shadow: 0 0 50px -5px hsl(var(--primary) / 0.6);
+    transform: translateY(-2px);
+  }
+  
+  /* Voice wave animation container */
+  .voice-wave {
+    @apply flex items-center justify-center gap-1;
+  }
+  
+  .voice-wave span {
+    @apply w-1 bg-primary rounded-full;
+    animation: voice-bar 1s ease-in-out infinite;
+  }
+  
+  .voice-wave span:nth-child(1) { animation-delay: 0s; height: 8px; }
+  .voice-wave span:nth-child(2) { animation-delay: 0.1s; height: 16px; }
+  .voice-wave span:nth-child(3) { animation-delay: 0.2s; height: 24px; }
+  .voice-wave span:nth-child(4) { animation-delay: 0.3s; height: 16px; }
+  .voice-wave span:nth-child(5) { animation-delay: 0.4s; height: 8px; }
+  
+  /* Subtle noise texture overlay */
+  .noise-overlay {
+    @apply pointer-events-none fixed inset-0 z-50 opacity-[0.015];
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E");
+  }
+  
+  /* Chat bubble styles - Updated for light theme */
+  .chat-bubble-agent {
+    @apply rounded-2xl px-4 py-3 max-w-[85%] text-foreground shadow-soft;
+    background: linear-gradient(135deg, hsl(210 25% 97%) 0%, hsl(210 20% 95%) 100%);
+    border-radius: 1.25rem 1.25rem 1.25rem 0.25rem;
+    border: 1px solid hsl(var(--border));
+  }
+  
+  .chat-bubble-user {
+    @apply bg-gradient-to-r from-primary to-ocean-light text-white px-4 py-3 max-w-[85%] shadow-soft;
+    border-radius: 1.25rem 1.25rem 0.25rem 1.25rem;
+  }
+  
+  /* Skeleton shimmer */
+  .skeleton-shimmer {
+    @apply relative overflow-hidden rounded-lg;
+    background: linear-gradient(90deg, hsl(210 25% 94%) 0%, hsl(210 20% 90%) 50%, hsl(210 25% 94%) 100%);
+    background-size: 200% 100%;
+    animation: shimmer 1.5s infinite;
+  }
+  
+  /* Map contour pattern - Lighter */
+  .map-pattern {
+    background-image: url("data:image/svg+xml,%3Csvg width='100' height='100' viewBox='0 0 100 100' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M20 50 Q35 30 50 50 T80 50' fill='none' stroke='rgba(0,100,180,0.05)' stroke-width='0.5'/%3E%3Cpath d='M10 70 Q30 50 50 70 T90 70' fill='none' stroke='rgba(0,100,180,0.05)' stroke-width='0.5'/%3E%3Cpath d='M15 30 Q40 10 65 30 T95 30' fill='none' stroke='rgba(0,100,180,0.05)' stroke-width='0.5'/%3E%3C/svg%3E");
+    background-size: 200px 200px;
+  }
+  
+  /* Dotted flight path */
+  .flight-path {
+    stroke-dasharray: 4 8;
+    stroke-linecap: round;
+    animation: dash 20s linear infinite;
+  }
+  
+  /* Pulsing ring for mic */
+  .pulse-ring {
+    @apply absolute rounded-full border-2 border-primary;
+    animation: pulse-ring 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+  }
+  
+  /* Always visible scrollbar */
+  .scrollbar-visible {
+    overflow-y: scroll;
+  }
+  
+  .scrollbar-visible::-webkit-scrollbar {
+    width: 6px;
+  }
+  
+  .scrollbar-visible::-webkit-scrollbar-track {
+    background: hsl(var(--muted));
+    border-radius: 3px;
+  }
+  
+  .scrollbar-visible::-webkit-scrollbar-thumb {
+    background: hsl(var(--border));
+    border-radius: 3px;
+  }
+  
+  .scrollbar-visible::-webkit-scrollbar-thumb:hover {
+    background: hsl(var(--muted-foreground) / 0.3);
+  }
+}
+
+@layer utilities {
+  .text-gradient-primary {
+    @apply bg-clip-text text-transparent;
+    background-image: linear-gradient(135deg, hsl(205 85% 50%) 0%, hsl(200 75% 65%) 100%);
+  }
+  
+  .text-gradient-teal {
+    @apply bg-clip-text text-transparent;
+    background-image: linear-gradient(135deg, hsl(185 60% 50%) 0%, hsl(180 45% 65%) 100%);
+  }
+  
+  .text-gradient-ocean {
+    @apply bg-clip-text text-transparent;
+    background-image: linear-gradient(135deg, hsl(205 85% 50%) 0%, hsl(210 70% 35%) 100%);
+  }
+  
+  .bg-gradient-ocean {
+    background: linear-gradient(135deg, hsl(205 85% 50%) 0%, hsl(200 75% 65%) 100%);
+  }
+  
+  .bg-gradient-teal {
+    background: linear-gradient(135deg, hsl(185 60% 50%) 0%, hsl(180 45% 65%) 100%);
+  }
+  
+  .bg-gradient-sky {
+    background: linear-gradient(180deg, hsl(205 100% 96%) 0%, hsl(210 40% 98%) 100%);
+  }
+}
+
+@keyframes voice-bar {
+  0%, 100% { transform: scaleY(0.4); opacity: 0.5; }
+  50% { transform: scaleY(1); opacity: 1; }
+}
+
+@keyframes shimmer {
+  0% { background-position: 200% 0; }
+  100% { background-position: -200% 0; }
+}
+
+@keyframes dash {
+  to { stroke-dashoffset: -100; }
+}
+
+@keyframes pulse-ring {
+  0% { transform: scale(1); opacity: 0.8; }
+  50% { transform: scale(1.5); opacity: 0; }
+  100% { transform: scale(1); opacity: 0; }
+}
+
+@keyframes float {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-10px); }
+}
+
+@keyframes glow-pulse {
+  0%, 100% { box-shadow: 0 0 20px -5px hsl(205 85% 50% / 0.3); }
+  50% { box-shadow: 0 0 40px -5px hsl(205 85% 50% / 0.5); }
+}

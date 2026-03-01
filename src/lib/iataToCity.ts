@@ -1,0 +1,41 @@
+const IATA_TO_CITY: Record<string, string> = {
+  ATL: "Atlanta", LAX: "Los Angeles", ORD: "Chicago", DFW: "Dallas",
+  DEN: "Denver", JFK: "New York", EWR: "New York", LGA: "New York",
+  SFO: "San Francisco", SEA: "Seattle", LAS: "Las Vegas", MCO: "Orlando",
+  MIA: "Miami", FLL: "Fort Lauderdale", CLT: "Charlotte", PHX: "Phoenix",
+  IAH: "Houston", HOU: "Houston", BOS: "Boston", MSP: "Minneapolis",
+  DTW: "Detroit", PHL: "Philadelphia", DCA: "Washington DC", IAD: "Washington DC",
+  BWI: "Baltimore", SAN: "San Diego", TPA: "Tampa", PDX: "Portland",
+  SLC: "Salt Lake City", STL: "St. Louis", HNL: "Honolulu", AUS: "Austin",
+  MCI: "Kansas City", RDU: "Raleigh", SJC: "San Jose", OAK: "Oakland",
+  BNA: "Nashville", MSY: "New Orleans", CLE: "Cleveland", IND: "Indianapolis",
+  CMH: "Columbus", PIT: "Pittsburgh", SAT: "San Antonio", ABQ: "Albuquerque",
+  MKE: "Milwaukee", BUF: "Buffalo", SJU: "San Juan", ANC: "Anchorage",
+  YYZ: "Toronto", YVR: "Vancouver", YUL: "Montreal", YYC: "Calgary",
+  MEX: "Mexico City", CUN: "Cancun", GDL: "Guadalajara", BOG: "Bogota",
+  LIM: "Lima", SCL: "Santiago", GRU: "São Paulo", GIG: "Rio de Janeiro",
+  EZE: "Buenos Aires", PTY: "Panama City", SJO: "San Jose",
+  LHR: "London", LGW: "London", STN: "London", CDG: "Paris", ORY: "Paris",
+  AMS: "Amsterdam", FRA: "Frankfurt", MUC: "Munich", BER: "Berlin",
+  MAD: "Madrid", BCN: "Barcelona", FCO: "Rome", MXP: "Milan",
+  NAP: "Naples", VCE: "Venice", LIS: "Lisbon", OPO: "Porto",
+  ZRH: "Zurich", GVA: "Geneva", BRU: "Brussels", DUB: "Dublin",
+  CPH: "Copenhagen", OSL: "Oslo", ARN: "Stockholm", HEL: "Helsinki",
+  VIE: "Vienna", PRG: "Prague", BUD: "Budapest", WAW: "Warsaw",
+  ATH: "Athens", IST: "Istanbul", DXB: "Dubai", AUH: "Abu Dhabi",
+  DOH: "Doha", TLV: "Tel Aviv", CAI: "Cairo", CMN: "Casablanca",
+  NBO: "Nairobi", JNB: "Johannesburg", CPT: "Cape Town",
+  DEL: "Delhi", BOM: "Mumbai", MAA: "Chennai", BLR: "Bangalore",
+  HYD: "Hyderabad", CCU: "Kolkata", CMB: "Colombo", DAC: "Dhaka",
+  PEK: "Beijing", PKX: "Beijing", PVG: "Shanghai", HKG: "Hong Kong",
+  NRT: "Tokyo", HND: "Tokyo", KIX: "Osaka", ICN: "Seoul",
+  SIN: "Singapore", KUL: "Kuala Lumpur", BKK: "Bangkok", SGN: "Ho Chi Minh City",
+  HAN: "Hanoi", MNL: "Manila", DPS: "Bali", CGK: "Jakarta",
+  SYD: "Sydney", MEL: "Melbourne", BNE: "Brisbane", PER: "Perth",
+  AKL: "Auckland", CHC: "Christchurch",
+};
+
+export function iataToCity(code: string): string {
+  if (!code) return code;
+  return IATA_TO_CITY[code.toUpperCase()] || code;
+}

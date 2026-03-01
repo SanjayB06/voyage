@@ -1,0 +1,22 @@
+project_id = "uxnpsxdkoxhhecpospsv"
+
+[functions.search-flights]
+verify_jwt = false
+
+[functions.search_flights_duffel]
+verify_jwt = false
+
+[functions.search_hotels_duffel]
+verify_jwt = false
+
+[functions.search_hotels_amadeus]
+verify_jwt = false
+
+[functions.book_hotel_amadeus]
+verify_jwt = false
+
+[functions.search_activities_amadeus]
+verify_jwt = false
+
+[functions.generate_activities_gemini]
+verify_jwt = false

@@ -1,0 +1,19 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32">
+  <defs>
+    <linearGradient id="bg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#13294B"/>
+      <stop offset="100%" stop-color="#1e3f70"/>
+    </linearGradient>
+    <linearGradient id="vgrad" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#5BB8D4"/>
+      <stop offset="100%" stop-color="#ffffff"/>
+    </linearGradient>
+  </defs>
+  <!-- Rounded square background -->
+  <rect width="32" height="32" rx="7" fill="url(#bg)"/>
+  <!-- Light blue top bar -->
+  <rect x="0" y="0" width="32" height="5" rx="7" fill="#5BB8D4"/>
+  <rect x="0" y="3" width="32" height="2" fill="#5BB8D4"/>
+  <!-- Bold V with light blue to white gradient -->
+  <text x="16" y="24" text-anchor="middle" font-size="22" font-weight="900" font-family="Arial Black, sans-serif" fill="url(#vgrad)">V</text>
+</svg>
