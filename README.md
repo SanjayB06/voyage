@@ -1,73 +1,130 @@
-# Welcome to your Lovable project
+# Voyage API Documentation
 
-## Project info
+Two servers must be running simultaneously:
+- **server.js** — port 3000 (Vapi voice agent, SSE, image analysis)
+- **server/index.ts** — port 3001 (flights, payments, Duffel orders)
 
-**URL**: https://lovable.dev/projects/REPLACE_WITH_PROJECT_ID
+---
 
-## How can I edit this code?
+## server.js — Port 3000
 
-There are several ways of editing your application.
-
-**Use Lovable**
-
-Simply visit the [Lovable Project](https://lovable.dev/projects/REPLACE_WITH_PROJECT_ID) and start prompting.
-
-Changes made via Lovable will be committed automatically to this repo.
-
-**Use your preferred IDE**
-
-If you want to work locally using your own IDE, you can clone this repo and push changes. Pushed changes will also be reflected in Lovable.
-
-The only requirement is having Node.js & npm installed - [install with nvm](https://github.com/nvm-sh/nvm#installing-and-updating)
-
-Follow these steps:
-
-```sh
-# Step 1: Clone the repository using the project's Git URL.
-git clone <YOUR_GIT_URL>
-
-# Step 2: Navigate to the project directory.
-cd <YOUR_PROJECT_NAME>
-
-# Step 3: Install the necessary dependencies.
-npm i
-
-# Step 4: Start the development server with auto-reloading and an instant preview.
-npm run dev
+### Health Check
+```bash
+curl http://localhost:3000/health
 ```
 
-**Edit a file directly in GitHub**
+### Config
+Returns Vapi public key and ngrok tunnel status.
+```bash
+curl http://localhost:3000/config
+```
 
-- Navigate to the desired file(s).
-- Click the "Edit" button (pencil icon) at the top right of the file view.
-- Make your changes and commit the changes.
+### Assistant Config
+Returns the inline Vapi assistant configuration (requires ngrok tunnel to be ready).
+```bash
+curl http://localhost:3000/api/assistant-config
+```
 
-**Use GitHub Codespaces**
+### Analyze Image
+Upload a travel photo to extract destination context via Gemini. Returns an `imageSessionId` used to start a context-aware voice call.
+```bash
+curl -X POST http://localhost:3000/api/analyze-image \
+  -F "image=@/path/to/photo.jpg"
+```
 
-- Navigate to the main page of your repository.
-- Click on the "Code" button (green button) near the top right.
-- Select the "Codespaces" tab.
-- Click on "New codespace" to launch a new Codespace environment.
-- Edit files directly within the Codespace and commit and push your changes once you're done.
+### Assistant Config from Image
+Returns a personalized assistant config based on a previously analyzed image.
+```bash
+curl "http://localhost:3000/api/assistant-config-from-image?imageSessionId=<imageSessionId>"
+```
 
-## What technologies are used for this project?
+### Update Passenger Field (typed UI input)
+Manually sync a passenger field into a session (mirrors what the voice agent does automatically).
+```bash
+curl -X POST http://localhost:3000/api/passenger-field \
+  -H "Content-Type: application/json" \
+  -d '{"callId":"test-call-123","field":"phone_number","value":"+14155552671"}'
+```
 
-This project is built with:
+Valid fields: `phone_number`, `email`, `date_of_birth`
 
-- Vite
-- TypeScript
-- React
-- shadcn-ui
-- Tailwind CSS
+### SSE Progress Stream
+Server-sent event stream for a call session. Emits `field_update`, `all_fields_collected`, `flights_ready`, `flight_selected`, `passenger_field_update`, `passenger_info_complete`, `booking_confirmed`.
+```bash
+# Stays open — Ctrl+C to stop
+curl -N http://localhost:3000/api/progress/<callId>
+```
 
-## How can I deploy this project?
+---
 
-Simply open [Lovable](https://lovable.dev/projects/REPLACE_WITH_PROJECT_ID) and click on Share -> Publish.
+## server/index.ts — Port 3001
 
-## Can I connect a custom domain to my Lovable project?
+### Health Check
+```bash
+curl http://localhost:3001/health
+```
 
-Yes, you can!
+### Search Flights
+Search for flight offers via Duffel. Returns top 3 offers sorted by price.
+```bash
+curl -X POST http://localhost:3001/api/search-flights \
+  -H "Content-Type: application/json" \
+  -d '{
+    "origin": "SFO",
+    "destination": "NRT",
+    "departure_date": "2026-04-15",
+    "passengers": 1
+  }'
+```
 
-To connect a domain, navigate to Project > Settings > Domains and click Connect Domain.
+### Create Payment Intent
+Fetches the Duffel offer price and creates a Stripe PaymentIntent. Pass `cached_amount` and `cached_currency` to avoid a Duffel re-fetch (prevents 423 on near-expired offers).
+```bash
+curl -X POST http://localhost:3001/api/create-payment-intent \
+  -H "Content-Type: application/json" \
+  -d '{
+    "offer_id": "off_0000A...",
+    "cached_amount": "450.00",
+    "cached_currency": "USD"
+  }'
+```
 
-Read more here: [Setting up a custom domain](https://docs.lovable.dev/features/custom-domain#custom-domain)
+### Confirm Payment (Test Mode)
+Confirms a Stripe PaymentIntent using the test card `pm_card_visa`. Use this instead of real card details in development.
+```bash
+curl -X POST http://localhost:3001/api/confirm-payment-test \
+  -H "Content-Type: application/json" \
+  -d '{"payment_intent_id":"pi_xxx"}'
+```
+
+### Place Duffel Order
+Verifies Stripe payment succeeded, then places the order with Duffel using `balance` payment type. Sends a confirmation email via Resend if `RESEND_API_KEY` is configured.
+```bash
+curl -X POST http://localhost:3001/api/place-duffel-order \
+  -H "Content-Type: application/json" \
+  -d '{
+    "offer_id": "off_0000A...",
+    "payment_intent_id": "pi_xxx",
+    "cached_amount": "450.00",
+    "cached_currency": "USD",
+    "cached_passenger_id": "pas_0000A...",
+    "passenger": {
+      "name": "John Smith",
+      "email": "john@example.com",
+      "phone": "+14155552671",
+      "dob": "1990-05-15",
+      "gender": "m"
+    }
+  }'
+```
+
+---
+
+## Typical End-to-End Flow
+
+```
+1. POST /api/search-flights          → get offer_id, cached_amount, cached_currency
+2. POST /api/create-payment-intent   → get payment_intent_id + client_secret
+3. POST /api/confirm-payment-test    → confirm payment (test mode)
+4. POST /api/place-duffel-order      → book flight, receive booking_reference
+```
